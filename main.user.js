@@ -1,16 +1,21 @@
 // ==UserScript==
-// @name         Twitter Image Download Button
-// @namespace    https://onee3.org
-// @version      0.65
-// @description  Show a button to download the full-size images in Twitter
-// @author       Frederick888
-// @license      GPL-3.0-or-later
-// @match        https://twitter.com/*
-// @match        https://tweetdeck.twitter.com/*
-// @grant        none
-// @require      https://onee3.org/libs/fileserver/1.3.8/FileSaver.min.js
-// @require      https://onee3.org/libs/jszip/3.2.2/jszip.min.js
-// @require      https://onee3.org/libs/jszip-utils/0.1.0/jszip-utils.min.js
+// @name            Twitter Image Download Button
+// @namespace       https://onee3.org
+// @version         0.6.5
+// @description     Show a button to download the full-size images in Twitter
+// @copyright 2017, Frederick888 (https://openuserjs.org/users/Frederick888)
+// @author          Frederick888
+// @license         GPL-3.0-or-later
+// @homepageURL     https://github.com/Frederick888/twitter-image-download-button
+// @supportURL      https://github.com/Frederick888/twitter-image-download-button/issues
+// @contributionURL https://github.com/Frederick888/twitter-image-download-button/pulls
+// @updateURL       https://openuserjs.org/meta/Frederick888/Twitter_Image_Download_Button.meta.js
+// @match           https://twitter.com/*
+// @match           https://tweetdeck.twitter.com/*
+// @grant           none
+// @require         https://onee3.org/libs/fileserver/1.3.8/FileSaver.min.js
+// @require         https://onee3.org/libs/jszip/3.2.2/jszip.min.js
+// @require         https://onee3.org/libs/jszip-utils/0.1.0/jszip-utils.min.js
 // ==/UserScript==
 
 function urlToPromise(url) {
