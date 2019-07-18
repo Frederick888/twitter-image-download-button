@@ -46,6 +46,22 @@ function fileMime(filename) {
     }
 }
 
+function saveFile(data, filename) {
+    let a = document.getElementById('download-tag');
+    if (!a) {
+        a = document.createElement('a');
+        a.id = 'download-tag';
+        a.style.display = 'none';
+        document.body.appendChild(a);
+    }
+    var blob = new Blob([data], { type: fileMime(filename) }),
+        url = window.URL.createObjectURL(blob);
+    a.href = url;
+    a.download = filename;
+    a.click();
+    window.URL.revokeObjectURL(url);
+}
+
 function downloadZip(imageUrls, filenamePrefix) {
     let zip = new JSZip();
     imageUrls.forEach(function (imageUrl) {
@@ -60,7 +76,12 @@ function downloadZip(imageUrls, filenamePrefix) {
     zip.generateAsync({
         type: "blob"
     }).then(function callback(blob) {
-        FileSaver.saveAs(blob, filenamePrefix + '.zip');
+        if (navigator.userAgent.indexOf('Firefox') || blob.size < 1048576) {
+            // Firefox has no limit on data URLs
+            saveFile(blob, filenamePrefix + '.zip');
+        } else {
+            FileSaver.saveAs(blob, filenamePrefix + '.zip');
+        }
     }, function (e) {
         alert("Download error!");
         console.log(e);
@@ -79,7 +100,11 @@ function downloadImage(imageUrl, filenamePrefix) {
         let blob = new Blob([xhr.response], {
             type: fileMime(filename)
         });
-        FileSaver.saveAs(blob, filename);
+        if (navigator.userAgent.indexOf('Firefox') || blob.size < 1048576) {
+            saveFile(blob, filename);
+        } else {
+            FileSaver.saveAs(blob, filename);
+        }
     };
     xhr.send();
 }
