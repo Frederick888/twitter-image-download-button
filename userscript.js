@@ -8,10 +8,9 @@
 // @match        https://twitter.com/*
 // @match        https://tweetdeck.twitter.com/*
 // @grant        none
-// @require      https://onee3.org/libs/fileserver/1.3.3/FileSaver.min.js
-// @require      https://onee3.org/libs/jszip/3.1.3/jszip.min.js
-// @require      https://onee3.org/libs/jszip-utils/0.0.2/jszip-utils.min.js
-// @require      https://onee3.org/libs/jquery/3.3.1/jquery.min.js
+// @require      https://onee3.org/libs/fileserver/1.3.8/FileSaver.min.js
+// @require      https://onee3.org/libs/jszip/3.2.2/jszip.min.js
+// @require      https://onee3.org/libs/jszip-utils/0.1.0/jszip-utils.min.js
 // ==/UserScript==
 
 function urlToPromise(url) {
@@ -26,7 +25,7 @@ function urlToPromise(url) {
     });
 }
 
-function file_mime(filename) {
+function fileMime(filename) {
     let extension = filename.replace(/.*(\.\w+)$/g, "$1");
     switch (extension) {
         case ".jpg":
@@ -42,183 +41,162 @@ function file_mime(filename) {
     }
 }
 
-function download_zip(image_urls, tweet_link) {
+function downloadZip(imageUrls, filenamePrefix) {
     let zip = new JSZip();
-    image_urls.forEach(function (url) {
-        let image_url = url;
-        console.log('Downloading ' + image_url);
-        let filename = tweet_link.replace(/\/(.*)\/status\/(.*)/, '$1-$2-') +
-            image_url.replace(/.*\//, '').replace(/:orig$/, '');
-        zip.file(filename, urlToPromise(image_url), {
+    imageUrls.forEach(function (imageUrl) {
+        imageUrl = new URL(imageUrl);
+        imageUrl.searchParams.set('name', 'orig');
+        console.log('Downloading ' + imageUrl);
+        let filename = filenamePrefix + '-' + imageUrl.pathname.replace(/^\/media\//, '') + '.' + imageUrl.searchParams.get('format');
+        zip.file(filename, urlToPromise(imageUrl), {
             binary: true
         });
     });
     zip.generateAsync({
         type: "blob"
     }).then(function callback(blob) {
-        saveAs(blob, tweet_link.replace(/\/(.*)\/status\/(.*)/, '$1-$2.zip'));
+        FileSaver.saveAs(blob, filenamePrefix + '.zip');
     }, function (e) {
         alert("Download error!");
         console.log(e);
     });
 }
 
-function download_image(image_url, tweet_link) {
-    console.log('Downloading ' + image_url);
-    // image_url should have :orig suffix
+function downloadImage(imageUrl, filenamePrefix) {
+    imageUrl = new URL(imageUrl);
+    imageUrl.searchParams.set('name', 'orig');
+    console.log('Downloading ' + imageUrl);
     let xhr = new XMLHttpRequest();
-    xhr.open("GET", image_url, true);
+    xhr.open("GET", imageUrl, true);
     xhr.responseType = "arraybuffer";
     xhr.onload = function (ev) {
-        let filename = tweet_link.replace(/\/(.*)\/status\/(.*)/, '$1-$2-') +
-            image_url.replace(/.*\//, '').replace(/:orig$/, '');
+        let filename = filenamePrefix + '-' + imageUrl.pathname.replace(/^\/media\//, '') + '.' + imageUrl.searchParams.get('format');
         let blob = new Blob([xhr.response], {
-            type: file_mime(filename)
+            type: fileMime(filename)
         });
-        saveAs(blob, filename);
+        FileSaver.saveAs(blob, filename);
     };
     xhr.send();
 }
 
-function tweet_link($fav_or_dm_btn) {
-    let regexp = /^https?:\/\/(\w+\.)?twitter\.com/;
-    let $tweet = $fav_or_dm_btn.closest('.tweet');
-    if ($tweet.length > 0) {
-        let $time = $tweet.find('.tweet-timestamp');
-        let link;
-        if ($time.is('a')) {
-            link = $time.attr('href');
-        } else {
-            link = $time.find('a').attr('href');
-        }
-        return link.replace(regexp, '');
+function htmlToElement(html) {
+    var template = document.createElement('template');
+    html = html.trim(); // Never return a text node of whitespace as the result
+    template.innerHTML = html;
+    return template.content.firstChild;
+}
+
+function mainLoop() {
+    let buttonHomePage = htmlToElement(`
+<div class="css-1dbjc4n r-1iusvr4 r-18u37iz r-16y2uox r-1h0z5md">
+    <div role="button" data-focusable="true" tabindex="0" class="css-18t94o4 css-1dbjc4n r-1777fci r-11cpok1 r-bztko3 r-lrvibr download-button" data-testid="download">
+        <div dir="ltr" class="css-901oao r-1awozwy r-1re7ezh r-6koalj r-1qd0xha r-a023e6 r-16dba41 r-1h0z5md r-ad9z0x r-bcqeeo r-o7ynqc r-clp7b1 r-3s2u2q r-qvutc0">
+            <div class="css-1dbjc4n r-xoduu5">
+                <div class="css-1dbjc4n r-sdzlij r-1p0dtai r-xoduu5 r-1d2f490 r-xf4iuw r-u8s1d r-zchlnj r-ipm5af r-o7ynqc r-6416eg"></div>
+                <svg class="r-4qtqp9 r-yyyyoo r-1xvli5t r-dnmrzs r-bnwqim r-1plcrui r-lrvibr r-1hdv0qi" fill="#000000" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" viewBox="0 0 24 24" style="enable-background:new 0 0 24 24;" xml:space="preserve"><path d="M20.953,11.003l-9.95,9.95c-1.097,1.096-2.537,1.645-3.978,1.645s-2.881-0.548-3.978-1.645  c-2.193-2.194-2.193-5.762-0.001-7.956l5.561-5.56c1.175-1.176,3.225-1.177,4.401,0c0.589,0.588,0.912,1.369,0.912,2.201  s-0.323,1.613-0.912,2.201l-4.316,4.316c-0.234,0.234-0.613,0.234-0.848,0s-0.234-0.614,0-0.849l4.316-4.316  c0.361-0.361,0.56-0.842,0.56-1.353s-0.198-0.991-0.56-1.352c-0.723-0.723-1.983-0.722-2.706,0l-5.56,5.56  c-1.725,1.725-1.725,4.533,0.001,6.258c1.726,1.727,4.533,1.726,6.259,0l9.949-9.95c1.725-1.725,1.725-4.533-0.001-6.258  c-1.725-1.726-4.532-1.725-6.259,0l-1.281,1.283c-0.234,0.234-0.614,0.234-0.849,0c-0.234-0.234-0.234-0.614-0.001-0.849  l1.282-1.283c2.195-2.192,5.763-2.193,7.956,0C23.146,5.241,23.146,8.81,20.953,11.003z"/></svg>
+            </div>
+            <div class="css-1dbjc4n r-xoduu5 r-1udh08x">
+                <span class="css-901oao css-16my406 r-gwet1z r-ad9z0x r-1n0xq6e r-bcqeeo r-d3hbe1 r-1wgg2b2 r-axxi2z r-qvutc0">
+                    <span class="css-901oao css-16my406 r-gwet1z r-ad9z0x r-bcqeeo r-qvutc0 download-button-counter">1</span>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+`);
+    let buttonModal = htmlToElement(`
+<div class="css-1dbjc4n r-1iusvr4 r-18u37iz r-16y2uox r-1h0z5md">
+    <div role="button" data-focusable="true" tabindex="0" class="css-18t94o4 css-1dbjc4n r-1777fci r-11cpok1 r-bztko3 r-lrvibr download-button" data-testid="like">
+        <div dir="ltr" class="css-901oao r-1awozwy r-jwli3a r-6koalj r-1qd0xha r-a023e6 r-16dba41 r-1h0z5md r-ad9z0x r-bcqeeo r-o7ynqc r-clp7b1 r-3s2u2q r-qvutc0">
+            <div class="css-1dbjc4n r-xoduu5">
+                <div class="css-1dbjc4n r-sdzlij r-1p0dtai r-xoduu5 r-1d2f490 r-xf4iuw r-u8s1d r-zchlnj r-ipm5af r-o7ynqc r-6416eg"></div>
+                <svg class="r-4qtqp9 r-yyyyoo r-50lct3 r-dnmrzs r-bnwqim r-1plcrui r-lrvibr r-1srniue" fill="#000000" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" viewBox="0 0 24 24" style="enable-background:new 0 0 24 24;" xml:space="preserve"><path d="M20.953,11.003l-9.95,9.95c-1.097,1.096-2.537,1.645-3.978,1.645s-2.881-0.548-3.978-1.645  c-2.193-2.194-2.193-5.762-0.001-7.956l5.561-5.56c1.175-1.176,3.225-1.177,4.401,0c0.589,0.588,0.912,1.369,0.912,2.201  s-0.323,1.613-0.912,2.201l-4.316,4.316c-0.234,0.234-0.613,0.234-0.848,0s-0.234-0.614,0-0.849l4.316-4.316  c0.361-0.361,0.56-0.842,0.56-1.353s-0.198-0.991-0.56-1.352c-0.723-0.723-1.983-0.722-2.706,0l-5.56,5.56  c-1.725,1.725-1.725,4.533,0.001,6.258c1.726,1.727,4.533,1.726,6.259,0l9.949-9.95c1.725-1.725,1.725-4.533-0.001-6.258  c-1.725-1.726-4.532-1.725-6.259,0l-1.281,1.283c-0.234,0.234-0.614,0.234-0.849,0c-0.234-0.234-0.234-0.614-0.001-0.849  l1.282-1.283c2.195-2.192,5.763-2.193,7.956,0C23.146,5.241,23.146,8.81,20.953,11.003z"/></svg>
+            </div>
+            <div class="css-1dbjc4n r-xoduu5 r-1udh08x">
+                <span class="css-901oao css-16my406 r-gwet1z r-ad9z0x r-1n0xq6e r-bcqeeo r-d3hbe1 r-1wgg2b2 r-axxi2z r-qvutc0">
+                    <span class="css-901oao css-16my406 r-gwet1z r-ad9z0x r-bcqeeo r-qvutc0">1</span>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+`);
+    let buttonTweetPage = htmlToElement(`
+<div class="css-1dbjc4n r-18u37iz r-1h0z5md r-3qxfft r-h4g966 r-rjfia">
+    <div aria-haspopup="false" aria-label="Download" role="button" data-focusable="true" tabindex="0" class="css-18t94o4 css-1dbjc4n r-1777fci r-11cpok1 r-bztko3 r-lrvibr download-button">
+        <div dir="ltr" class="css-901oao r-1awozwy r-1re7ezh r-6koalj r-1qd0xha r-a023e6 r-16dba41 r-1h0z5md r-ad9z0x r-bcqeeo r-o7ynqc r-clp7b1 r-3s2u2q r-qvutc0">
+            <div class="css-1dbjc4n r-xoduu5">
+                <div class="css-1dbjc4n r-sdzlij r-1p0dtai r-xoduu5 r-1d2f490 r-xf4iuw r-u8s1d r-zchlnj r-ipm5af r-o7ynqc r-6416eg"></div>
+                <svg class="r-4qtqp9 r-yyyyoo r-1xvli5t r-dnmrzs r-bnwqim r-1plcrui r-lrvibr r-1hdv0qi" fill="#000000" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" viewBox="0 0 24 24" style="enable-background:new 0 0 24 24;" xml:space="preserve"><path d="M20.953,11.003l-9.95,9.95c-1.097,1.096-2.537,1.645-3.978,1.645s-2.881-0.548-3.978-1.645  c-2.193-2.194-2.193-5.762-0.001-7.956l5.561-5.56c1.175-1.176,3.225-1.177,4.401,0c0.589,0.588,0.912,1.369,0.912,2.201  s-0.323,1.613-0.912,2.201l-4.316,4.316c-0.234,0.234-0.613,0.234-0.848,0s-0.234-0.614,0-0.849l4.316-4.316  c0.361-0.361,0.56-0.842,0.56-1.353s-0.198-0.991-0.56-1.352c-0.723-0.723-1.983-0.722-2.706,0l-5.56,5.56  c-1.725,1.725-1.725,4.533,0.001,6.258c1.726,1.727,4.533,1.726,6.259,0l9.949-9.95c1.725-1.725,1.725-4.533-0.001-6.258  c-1.725-1.726-4.532-1.725-6.259,0l-1.281,1.283c-0.234,0.234-0.614,0.234-0.849,0c-0.234-0.234-0.234-0.614-0.001-0.849  l1.282-1.283c2.195-2.192,5.763-2.193,7.956,0C23.146,5.241,23.146,8.81,20.953,11.003z"/></svg>
+            </div>
+        </div>
+    </div>
+</div>
+`);
+
+    let articles = document.querySelectorAll('article.css-1dbjc4n');
+    let modals = document.querySelectorAll('div.css-1dbjc4n[aria-modal="true"]');
+    let containers;
+    if (window.location.pathname.match(/^\/.*\/status\/\d+\/photo\/\d+/) && modals.length > 0) {
+        containers = Array.from(articles).concat(Array.from(modals));
     } else {
-        let $tweet_detail = $fav_or_dm_btn.closest('.tweet-detail');
-        let link = $tweet_detail.find('div.margin-tl.txt-mute > a').attr('href');
-        return link.replace(regexp, '');
+        containers = articles;
     }
-}
-
-function main_loop_deck() {
-    console.log('main loop (deck) triggered');
-
-    let button = '<li class="tweet-action-item pull-left margin-r--13">' +
-        '<a class="js-show-tip tweet-action position-rel" href="#" rel="download" title="" data-original-title="Download Image(s)">' +
-        '<i class="js-icon-download icon icon-download icon-download-toggle txt-center"></i>' +
-        '<span class="is-vishidden">Download Image(s)</span></a></li>';
-    let button_detail = '<li class="tweet-detail-action-item">' +
-        '<a class="js-show-tip tweet-detail-action position-rel" href="#" rel="download" title="" data-original-title="Download Image(s)">' +
-        '<i class="js-icon-download icon icon-download icon-download-toggle txt-center"></i>' +
-        '<span class="is-vishidden">Download Image(s)</span></a></li>';
-
-    let $favIcon = $('.js-icon-favorite');
-    $favIcon.each(function () {
-        let $action_item = $(this).closest('.tweet-action-item').length > 0 ?
-            $(this).closest('.tweet-action-item') : $(this).closest('.tweet-detail-action-item');
-        let link = tweet_link($action_item);
-        if ($action_item.attr('download-added') != 'true') {
-            $action_item.attr('download-added', 'true');
-            if ($(this).closest('.tweet-action-item').length > 0) {
-                $action_item.after(button);
-            } else {
-                $action_item.after(button_detail);
-            }
-
-            let $parent = $action_item.closest('.js-tweet');
-            let $added_button = $parent.find('.icon-download').closest('a.tweet-action').length > 0 ?
-                $parent.find('.icon-download').closest('a.tweet-action') : $parent.find('.icon-download').closest('a.tweet-detail-action');
-
-            let $modal_content = $parent.closest('.js-modal-panel.med-fullpanel');
-            if ($modal_content.length > 0) {
-                // this url has :large itself
-                $added_button.on('click', function () {
-                    let image_url = $modal_content.find('img.media-img').attr('src');
-                    download_image(image_url.replace(/^.*(http.*\.\w+)(:small|:large)?.*$/, "$1:orig"), link);
-                });
-            } else {
-                $image_container = $parent.find('.js-media-image-link');
-                if ($image_container.length === 0) {
-                    $added_button.css('display', 'none');
-                } else if ($image_container.length == 1) {
-                    let image_url = $image_container.css('background-image') != 'none' ?
-                        $image_container.css('background-image') : $image_container.find('img').attr('src');
-                    image_url = image_url.replace(/^.*(http.*\.\w+)(:small|:large)?.*$/, "$1:orig");
-                    $added_button.on('click', function () {
-                        download_image(image_url, link);
-                    });
-                } else if ($image_container.length > 1) {
-                    let image_urls = [];
-                    $image_container.each(function () {
-                        let image_url = $(this).css('background-image') != 'none' ?
-                            $(this).css('background-image') : $(this).find('img').attr('src');
-                        image_url = image_url.replace(/^.*(http.*\.\w+)(:small|:large)?.*$/, "$1:orig");
-                        image_urls.push(image_url);
-                    });
-                    $added_button.on('click', function () {
-                        download_zip(image_urls, link);
-                    });
-                }
-            }
+    containers.forEach((container) => {
+        let downloadButton = container.querySelector('.download-button');
+        if (downloadButton) {
+            return;
         }
-    });
-}
-
-function main_loop() {
-    console.log('main loop triggered');
-
-    let button = '<div class="ProfileTweet-action ProfileTweet-action--download">' +
-        '<button class="ProfileTweet-actionButton u-textUserColorHover">' +
-        '<div class="IconContainer js-tooltip" data-original-title="Download Image(s)">' +
-        '<span class="Icon Icon--medium Icon--dl"></span>' +
-        '<span class="u-hiddenVisually">Download Image(s)</span></div>' +
-        '<span class="ProfileTweet-actionCount">' +
-        '<span class="ProfileTweet-actionCountForPresentation" aria-hidden="true">1</span></span>' +
-        '</button></div>';
-
-    let $dmIcon = $('.ProfileTweet-action--dm');
-    $dmIcon.each(function () {
-        let link = tweet_link($(this));
-        if ($(this).attr('download-added') != 'true') {
-            $(this).attr('download-added', 'true');
-            $(this).before(button);
-
-            let $parent = $(this).closest('.ProfileTweet-actionList');
-            let $added_button = $parent.find('.Icon--dl').closest('.ProfileTweet-actionButton');
-            let $added_button_counter = $added_button.find('.ProfileTweet-actionCountForPresentation');
-
-            let $gallery_content = $parent.closest('.Gallery-content');
-            // gallery mode
-            if ($gallery_content.length > 0) {
-                // this url has :large itself
-                $added_button.on('click', function () {
-                    let image_url = $gallery_content.find('.Gallery-media .media-image').attr('src');
-                    download_image(image_url.replace(/^.*(http.*\.\w+)(:small|:large)?.*$/, "$1:orig"), link);
-                });
+        let imageBoxes = Array.from(container.querySelectorAll('img.css-9pa8cd'))
+            .filter((imageBox) => {
+                return imageBox.getAttribute('src').indexOf('pbs.twimg.com/media') > 0;
+            });
+        if (imageBoxes.length > 0) {
+            let filenamePrefix;
+            if (container.querySelector('div.css-1dbjc4n > a[href*="/status/"]')) {
+                filenamePrefix = container.querySelector('div.css-1dbjc4n > a[href*="/status/"]').getAttribute('href').replace(/^\/(.*)\/status\/(\d+).*?$/, '$1-$2');
             } else {
-                let $image_container = $parent.closest('.tweet')
-                    .find('.AdaptiveMediaOuterContainer');
-                if ($image_container.length > 0) {
-                    $image_container = $image_container.first().find('.AdaptiveMedia-photoContainer');
+                filenamePrefix = window.location.pathname.replace(/^\/(.*)\/status\/(\d+)\/.*?$/, '$1-$2');
+            }
+            let buttonGroup = container.querySelector(':scope div.css-1dbjc4n.r-18u37iz[role="group"]');
+            let buttons = buttonGroup.querySelectorAll(':scope > div.r-1h0z5md');
+            let shareButton = buttons[buttons.length - 1];
+            if (shareButton.classList.contains('r-1iusvr4')) {
+                // homepage   css-1dbjc4n r-1iusvr4 r-18u37iz r-16y2uox r-1h0z5md
+                shareButton.before(buttonHomePage);
+            } else if (shareButton.classList.contains('r-3qxfft')) {
+                // tweet page css-1dbjc4n r-18u37iz r-1h0z5md r-3qxfft r-h4g966 r-rjfia
+                shareButton.before(buttonTweetPage);
+            } else if (shareButton.classList.contains('r-1mlwlqe')) {
+                // modal      css-1dbjc4n r-1mlwlqe r-18u37iz r-18kxxzh r-1h0z5md
+                shareButton.before(buttonModal);
+            }
+            downloadButton = container.querySelector('.download-button');
+            if (downloadButton) {
+                let downloadButtonCounter = container.querySelector('.download-button-counter');
+                if (downloadButtonCounter) {
+                    downloadButtonCounter.innerHTML = imageBoxes.length;
                 }
-                let image_count = $image_container.length;
-                if (image_count === 0) {
-                    $added_button.closest('div').css('display', 'none');
-                } else if (image_count == 1) {
-                    $added_button_counter.html(image_count);
-                    let image_url = $image_container.attr('data-image-url') + ':orig';
-                    $added_button.on('click', function () {
-                        download_image(image_url, link);
+                if (imageBoxes.length === 1) {
+                    downloadButton.addEventListener('click', (event) => {
+                        let imageUrl = imageBoxes[0].getAttribute('src');
+                        downloadImage(imageUrl, filenamePrefix);
+                    });
+                } else if (shareButton.classList.contains('r-1mlwlqe')) {
+                    downloadButton.addEventListener('click', (event) => {
+                        let modalUl = container.querySelector('ul');
+                        let ulWidth = parseInt(modalUl.style.getPropertyValue('width').replace(/px$/, ''));
+                        let transformX = parseInt(modalUl.style.getPropertyValue('transform').replace(/.*translate3d\(([-\d]+)px.*/, '$1'));
+                        let imageIndex = Math.round(Math.abs(transformX) * 2 / ulWidth);
+                        let imageUrl = imageBoxes[imageIndex].getAttribute('src');
+                        downloadImage(imageUrl, filenamePrefix);
                     });
                 } else {
-                    $added_button_counter.html(image_count);
-                    $added_button.on('click', function () {
-                        let image_urls = [];
-                        $image_container.each(function () {
-                            let $this = $(this);
-                            let image_url = $this.attr('data-image-url') + ':orig';
-                            image_urls.push(image_url);
+                    downloadButton.addEventListener('click', (event) => {
+                        let imageUrls = imageBoxes.map((imageBox) => {
+                            return imageBox.getAttribute('src');
                         });
-                        download_zip(image_urls, link);
+                        downloadZip(imageUrls, filenamePrefix);
                     });
                 }
             }
@@ -308,26 +286,8 @@ function main_loop() {
 function bootstrap() {
     'use strict';
     if (window.location.hostname == "twitter.com") {
-        let css = '<style>.Icon--dl:before { content: "\\f088"; color: #657786; }' +
-            '.ProfileTweet-action.ProfileTweet-action--download:hover .Icon--dl:before { color: #ff9966; }' +
-            '.ProfileTweet-action.ProfileTweet-action--download:hover .ProfileTweet-actionCountForPresentation { color: #ff9966; }' +
-            '.Gallery .ProfileTweet-actionCountForPresentation { color: #fff !important; }' +
-            '.Gallery .Icon--dl:before { color: #fff; }' +
-            '.Gallery .ProfileTweet-action.ProfileTweet-action--download:hover .Icon--dl:before { color: #ff9966; }' +
-            '</style>';
-
-        $('head').append(css);
-
-        main_loop();
-        setInterval(main_loop, 500);
-    } else if (window.location.hostname == "tweetdeck.twitter.com") {
-        let css = '<style>.js-icon-download:before { content: "\\f088"; }' +
-            '.tweet-action:hover .icon-download { color: #ff9966; }' +
-            '.without-tweet-drag-handles .tweet-detail-action-item { width: 20% !important; }' +
-            '</style>';
-        $('head').append(css);
-        main_loop_deck();
-        setInterval(main_loop_deck, 500);
+        mainLoop();
+        setInterval(mainLoop, 500);
     }
 }
 
