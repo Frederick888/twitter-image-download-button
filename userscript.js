@@ -177,13 +177,16 @@ function mainLoop() {
                 if (downloadButtonCounter) {
                     downloadButtonCounter.innerHTML = imageBoxes.length;
                 }
+                let clonedButton = downloadButton.cloneNode(true);
                 if (imageBoxes.length === 1) {
-                    downloadButton.addEventListener('click', (event) => {
+                    downloadButton.parentNode.replaceChild(clonedButton, downloadButton);
+                    clonedButton.addEventListener('click', (event) => {
                         let imageUrl = imageBoxes[0].getAttribute('src');
                         downloadImage(imageUrl, filenamePrefix);
                     });
                 } else if (shareButton.classList.contains('r-1mlwlqe')) {
-                    downloadButton.addEventListener('click', (event) => {
+                    downloadButton.parentNode.replaceChild(clonedButton, downloadButton);
+                    clonedButton.addEventListener('click', (event) => {
                         let modalUl = container.querySelector('ul');
                         let ulWidth = parseInt(modalUl.style.getPropertyValue('width').replace(/px$/, ''));
                         let transformX = parseInt(modalUl.style.getPropertyValue('transform').replace(/.*translate3d\(([-\d]+)px.*/, '$1'));
@@ -192,7 +195,8 @@ function mainLoop() {
                         downloadImage(imageUrl, filenamePrefix);
                     });
                 } else {
-                    downloadButton.addEventListener('click', (event) => {
+                    downloadButton.parentNode.replaceChild(clonedButton, downloadButton);
+                    clonedButton.addEventListener('click', (event) => {
                         let imageUrls = imageBoxes.map((imageBox) => {
                             return imageBox.getAttribute('src');
                         });
