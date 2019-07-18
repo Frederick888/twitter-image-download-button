@@ -153,8 +153,8 @@ function mainLoop() {
             });
         if (imageBoxes.length > 0) {
             let filenamePrefix;
-            if (container.querySelector('div.css-1dbjc4n > a[href*="/status/"]')) {
-                filenamePrefix = container.querySelector('div.css-1dbjc4n > a[href*="/status/"]').getAttribute('href').replace(/^\/(.*)\/status\/(\d+).*?$/, '$1-$2');
+            if (imageBoxes[0].closest('div.css-1dbjc4n > a[href*="/status/"]')) {
+                filenamePrefix = imageBoxes[0].closest('div.css-1dbjc4n > a[href*="/status/"]').getAttribute('href').replace(/^\/(.*)\/status\/(\d+).*?$/, '$1-$2');
             } else {
                 filenamePrefix = window.location.pathname.replace(/^\/(.*)\/status\/(\d+)\/.*?$/, '$1-$2');
             }
