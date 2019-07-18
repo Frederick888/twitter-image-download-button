@@ -287,7 +287,7 @@ function bootstrap() {
     'use strict';
     if (window.location.hostname == "twitter.com") {
         mainLoop();
-        setInterval(mainLoop, 500);
+        setInterval(mainLoop, 200);
     }
 }
 
