@@ -3,7 +3,7 @@
 // @namespace       https://onee3.org
 // @version         1.0.0
 // @description     Show a button to download the full-size images in Twitter
-// @copyright 2017, Frederick888 (https://openuserjs.org/users/Frederick888)
+// @copyright       2017, Frederick888 (https://openuserjs.org/users/Frederick888)
 // @author          Frederick888
 // @license         GPL-3.0-or-later
 // @homepageURL     https://github.com/Frederick888/twitter-image-download-button
