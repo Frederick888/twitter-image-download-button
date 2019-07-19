@@ -11,7 +11,7 @@
 // @contributionURL https://github.com/Frederick888/twitter-image-download-button/pulls
 // @updateURL       https://openuserjs.org/meta/Frederick888/Twitter_Image_Download_Button.meta.js
 // @match           https://twitter.com/*
-// @match           https://tweetdeck.twitter.com/*
+// @match           https://mobile.twitter.com/*
 // @grant           none
 // @require         https://onee3.org/libs/fileserver/2.0.2/FileSaver.min.js
 // @require         https://onee3.org/libs/jszip/3.2.2/jszip.min.js
@@ -240,8 +240,6 @@ function mainLoop() {
 
 (function () {
     'use strict';
-    if (window.location.hostname == "twitter.com") {
-        mainLoop();
-        setInterval(mainLoop, 200);
-    }
+    mainLoop();
+    setInterval(mainLoop, 200);
 })();
