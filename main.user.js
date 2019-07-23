@@ -240,6 +240,24 @@ function mainLoop() {
 
 (function () {
     'use strict';
+    let style = htmlToElement(`
+<style>
+    .download-button:hover > div {
+        color: rgb(255, 102, 0);
+    }
+    .download-button:hover > div > div > div:first-of-type {
+        background-color: rgba(255, 102, 0, 0.1);
+    }
+    div.css-1dbjc4n[aria-modal="true"] .download-button:hover > div {
+        color: rgb(255, 255, 255);
+    }
+    div.css-1dbjc4n[aria-modal="true"] .download-button:hover > div > div > div:first-of-type {
+        background-color: rgba(255, 255, 255, 0.1);
+    }
+</style>
+`);
+    let head = document.getElementsByTagName('head')[0];
+    head.appendChild(style);
     mainLoop();
     setInterval(mainLoop, 200);
 })();
