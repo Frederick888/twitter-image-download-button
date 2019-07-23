@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name            Twitter Image Download Button
 // @namespace       https://onee3.org
-// @version         1.1.1
+// @version         1.1.2
 // @description     Show a button to download the full-size images in Twitter
 // @copyright       2017, Frederick888 (https://openuserjs.org/users/Frederick888)
 // @author          Frederick888
