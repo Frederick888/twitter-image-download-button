@@ -258,6 +258,19 @@ function mainLoop() {
 `);
     let head = document.getElementsByTagName('head')[0];
     head.appendChild(style);
-    mainLoop();
-    setInterval(mainLoop, 200);
+
+    if (typeof MutationObserver === 'function') {
+        let observerConfig = {
+            attributes: true,
+            characterData: true,
+            childList: true,
+            subtree: true,
+        };
+        let body = document.getElementsByTagName('body')[0];
+        let observer = new MutationObserver(mainLoop);
+        observer.observe(body, observerConfig);
+    } else {
+        mainLoop();
+        setInterval(mainLoop, 200);
+    }
 })();
