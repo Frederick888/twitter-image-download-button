@@ -223,7 +223,7 @@ function mainLoop() {
                         let modalUl = container.querySelector('ul');
                         let ulWidth = parseInt(modalUl.style.getPropertyValue('width').replace(/px$/, ''));
                         let transformX = parseInt(modalUl.style.getPropertyValue('transform').replace(/.*translate3d\(([\.-\d]+)px.*/, '$1'));
-                        let imageIndex = Math.round(Math.abs(transformX) * 2 / ulWidth);
+                        let imageIndex = Math.round(Math.abs(transformX) * 3 / ulWidth);
                         let imageUrl = imageBoxes[imageIndex].getAttribute('src');
                         downloadImage(imageUrl, filenamePrefix);
                     });
