@@ -174,13 +174,13 @@ function mainLoop() {
     }
     containers.forEach((container) => {
         let downloadButton = container.querySelector('.download-button');
-        if (downloadButton) {
-            return;
-        }
         let imageBoxes = Array.from(container.querySelectorAll('img.css-9pa8cd'))
             .filter((imageBox) => {
                 return imageBox.getAttribute('src').indexOf('pbs.twimg.com/media') > 0;
             });
+        if (downloadButton && parseInt(downloadButton.getAttribute('count-images')) === imageBoxes.length) {
+            return;
+        }
         if (imageBoxes.length > 0) {
             let filenamePrefix;
             if (imageBoxes[0].closest('div.css-1dbjc4n > a[href*="/status/"]')) {
@@ -191,18 +191,21 @@ function mainLoop() {
             let buttonGroup = container.querySelector(':scope div.css-1dbjc4n.r-18u37iz[role="group"]');
             let buttons = buttonGroup.querySelectorAll(':scope > div.r-1h0z5md');
             let shareButton = buttons[buttons.length - 1];
-            if (shareButton.classList.contains('r-1iusvr4')) {
-                // homepage   css-1dbjc4n r-1iusvr4 r-18u37iz r-16y2uox r-1h0z5md
-                shareButton.before(buttonHomePage);
-            } else if (shareButton.classList.contains('r-3qxfft')) {
-                // tweet page css-1dbjc4n r-18u37iz r-1h0z5md r-3qxfft r-h4g966 r-rjfia
-                shareButton.before(buttonTweetPage);
-            } else if (shareButton.classList.contains('r-1mlwlqe')) {
-                // modal      css-1dbjc4n r-1mlwlqe r-18u37iz r-18kxxzh r-1h0z5md
-                shareButton.before(buttonModal);
+            if (!downloadButton) {
+                if (shareButton.classList.contains('r-1iusvr4')) {
+                    // homepage   css-1dbjc4n r-1iusvr4 r-18u37iz r-16y2uox r-1h0z5md
+                    shareButton.before(buttonHomePage);
+                } else if (shareButton.classList.contains('r-3qxfft')) {
+                    // tweet page css-1dbjc4n r-18u37iz r-1h0z5md r-3qxfft r-h4g966 r-rjfia
+                    shareButton.before(buttonTweetPage);
+                } else if (shareButton.classList.contains('r-1mlwlqe')) {
+                    // modal      css-1dbjc4n r-1mlwlqe r-18u37iz r-18kxxzh r-1h0z5md
+                    shareButton.before(buttonModal);
+                }
+                downloadButton = container.querySelector('.download-button');
             }
-            downloadButton = container.querySelector('.download-button');
             if (downloadButton) {
+                downloadButton.setAttribute('count-images', imageBoxes.length);
                 let downloadButtonCounter = container.querySelector('.download-button-counter');
                 if (downloadButtonCounter) {
                     downloadButtonCounter.innerHTML = imageBoxes.length;
