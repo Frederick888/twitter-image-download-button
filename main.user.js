@@ -116,6 +116,35 @@ function htmlToElement(html) {
     return template.content.firstChild;
 }
 
+function isHomePage() {
+    return window.location.pathname.match(/^(\/home)?(\?.*)?$/);
+}
+
+function isTweetPage() {
+    return window.location.pathname.match(/^\/.*\/status\/\d+(\?.*)?$/);
+}
+
+function isPhotoModalPage() {
+    return window.location.pathname.match(/^\/.*\/status\/\d+\/photo\/\d+/);
+}
+
+let ButtonLocation = {
+    HOME_PAGE: 1,
+    TWEET_PAGE: 2,
+    PHOTO_MODAL: 3,
+};
+
+function getButtonLocation(shareButton) {
+    let innerDiv = shareButton.querySelector(':scope div.css-901oao');
+    if (innerDiv.classList.contains('r-jwli3a')) {
+        return ButtonLocation.PHOTO_MODAL;
+    }
+    if (isTweetPage()) {
+        return ButtonLocation.TWEET_PAGE;
+    }
+    return ButtonLocation.HOME_PAGE;
+}
+
 function mainLoop() {
     let buttonHomePage = htmlToElement(`
 <div class="css-1dbjc4n r-1iusvr4 r-18u37iz r-16y2uox r-1h0z5md">
@@ -167,7 +196,7 @@ function mainLoop() {
     let articles = document.querySelectorAll('article.css-1dbjc4n');
     let modals = document.querySelectorAll('div.css-1dbjc4n[aria-modal="true"]');
     let containers;
-    if (window.location.pathname.match(/^\/.*\/status\/\d+\/photo\/\d+/) && modals.length > 0) {
+    if (isPhotoModalPage() && modals.length > 0) {
         containers = Array.from(articles).concat(Array.from(modals));
     } else {
         containers = articles;
@@ -192,14 +221,11 @@ function mainLoop() {
             let buttons = buttonGroup.querySelectorAll(':scope > div.r-1h0z5md');
             let shareButton = buttons[buttons.length - 1];
             if (!downloadButton) {
-                if (shareButton.classList.contains('r-1iusvr4')) {
-                    // homepage   css-1dbjc4n r-1iusvr4 r-18u37iz r-16y2uox r-1h0z5md
+                if (getButtonLocation(shareButton) == ButtonLocation.HOME_PAGE) {
                     shareButton.before(buttonHomePage);
-                } else if (shareButton.classList.contains('r-3qxfft')) {
-                    // tweet page css-1dbjc4n r-18u37iz r-1h0z5md r-3qxfft r-h4g966 r-rjfia
+                } else if (getButtonLocation(shareButton) == ButtonLocation.TWEET_PAGE) {
                     shareButton.before(buttonTweetPage);
-                } else if (shareButton.classList.contains('r-1mlwlqe')) {
-                    // modal      css-1dbjc4n r-1mlwlqe r-18u37iz r-18kxxzh r-1h0z5md
+                } else if (getButtonLocation(shareButton) == ButtonLocation.PHOTO_MODAL) {
                     shareButton.before(buttonModal);
                 }
                 downloadButton = container.querySelector('.download-button');
