@@ -4,8 +4,8 @@
   "description": "Show a button to download the full-size images in Twitter",
   "main": "userscript.js",
   "dependencies": {
-    "file-saver": "^2.0.2",
-    "jszip": "^3.2.2",
+    "file-saver": "^2.0.5",
+    "jszip": "^3.7.1",
     "jszip-utils": "^0.1.0"
   },
   "devDependencies": {},

@@ -13,8 +13,8 @@
 // @match           https://twitter.com/*
 // @match           https://mobile.twitter.com/*
 // @grant           none
-// @require         https://onee3.org/libs/fileserver/2.0.2/FileSaver.min.js
-// @require         https://onee3.org/libs/jszip/3.2.2/jszip.min.js
+// @require         https://onee3.org/libs/fileserver/2.0.5/FileSaver.min.js
+// @require         https://onee3.org/libs/jszip/3.7.1/jszip.min.js
 // @require         https://onee3.org/libs/jszip-utils/0.1.0/jszip-utils.min.js
 // ==/UserScript==
 
