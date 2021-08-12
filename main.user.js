@@ -95,7 +95,7 @@ function downloadImage(imageUrl, filenamePrefix) {
     let xhr = new XMLHttpRequest();
     xhr.open("GET", imageUrl, true);
     xhr.responseType = "arraybuffer";
-    xhr.onload = function (ev) {
+    xhr.onload = function (_ev) {
         let filename = filenamePrefix + '-' + imageUrl.pathname.replace(/^\/media\//, '') + '.' + imageUrl.searchParams.get('format');
         let blob = new Blob([xhr.response], {
             type: fileMime(filename)
@@ -239,13 +239,13 @@ function mainLoop() {
                 let clonedButton = downloadButton.cloneNode(true);
                 if (imageBoxes.length === 1) {
                     downloadButton.parentNode.replaceChild(clonedButton, downloadButton);
-                    clonedButton.addEventListener('click', (event) => {
+                    clonedButton.addEventListener('click', (_event) => {
                         let imageUrl = imageBoxes[0].getAttribute('src');
                         downloadImage(imageUrl, filenamePrefix);
                     });
                 } else if (getButtonLocation(shareButton) == ButtonLocation.PHOTO_MODAL) {
                     downloadButton.parentNode.replaceChild(clonedButton, downloadButton);
-                    clonedButton.addEventListener('click', (event) => {
+                    clonedButton.addEventListener('click', (_event) => {
                         let modalUl = container.querySelector('ul');
                         let ulWidth = parseInt(modalUl.style.getPropertyValue('width').replace(/px$/, ''));
                         let transformX = parseInt(modalUl.style.getPropertyValue('transform').replace(/.*translate3d\(([\.-\d]+)px.*/, '$1'));
@@ -255,7 +255,7 @@ function mainLoop() {
                     });
                 } else {
                     downloadButton.parentNode.replaceChild(clonedButton, downloadButton);
-                    clonedButton.addEventListener('click', (event) => {
+                    clonedButton.addEventListener('click', (_event) => {
                         let imageUrls = imageBoxes.map((imageBox) => {
                             return imageBox.getAttribute('src');
                         });
