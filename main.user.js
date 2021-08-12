@@ -54,7 +54,7 @@ function saveFile(data, filename) {
         a.style.display = 'none';
         document.body.appendChild(a);
     }
-    var blob = new Blob([data], { type: fileMime(filename) }),
+    var blob = new Blob([data], {type: fileMime(filename)}),
         url = window.URL.createObjectURL(blob);
     a.href = url;
     a.download = filename;
