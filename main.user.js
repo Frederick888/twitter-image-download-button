@@ -243,7 +243,7 @@ function mainLoop() {
                         let imageUrl = imageBoxes[0].getAttribute('src');
                         downloadImage(imageUrl, filenamePrefix);
                     });
-                } else if (shareButton.classList.contains('r-1mlwlqe')) {
+                } else if (getButtonLocation(shareButton) == ButtonLocation.PHOTO_MODAL) {
                     downloadButton.parentNode.replaceChild(clonedButton, downloadButton);
                     clonedButton.addEventListener('click', (event) => {
                         let modalUl = container.querySelector('ul');
