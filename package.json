@@ -1,6 +1,6 @@
 {
   "name": "twitter-image-download-button",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Show a button to download the full-size images in Twitter",
   "main": "userscript.js",
   "dependencies": {
