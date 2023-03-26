@@ -234,7 +234,7 @@ function mainLoop() {
                 downloadButton.setAttribute('count-images', imageBoxes.length);
                 let downloadButtonCounter = container.querySelector('.download-button-counter');
                 if (downloadButtonCounter) {
-                    downloadButtonCounter.innerHTML = imageBoxes.length;
+                    downloadButtonCounter.innerHTML = getButtonLocation(shareButton) == ButtonLocation.PHOTO_MODAL ? 1 : imageBoxes.length;
                 }
                 let clonedButton = downloadButton.cloneNode(true);
                 if (imageBoxes.length === 1) {
