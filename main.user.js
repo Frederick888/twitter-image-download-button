@@ -217,8 +217,8 @@ function mainLoop() {
             } else {
                 filenamePrefix = window.location.pathname.replace(/^\/(.*)\/status\/(\d+)\/.*?$/, '$1-$2');
             }
-            let buttonGroup = container.querySelector(':scope div.css-1dbjc4n.r-18u37iz[role="group"]');
-            let buttons = buttonGroup.querySelectorAll(':scope > div.r-1h0z5md');
+            let buttonGroup = container.querySelector(':scope div.css-1dbjc4n > div.css-1dbjc4n.r-1ta3fxp.r-18u37iz[role="group"]');
+            let buttons = buttonGroup.querySelectorAll(':scope > div:last-child');
             let shareButton = buttons[buttons.length - 1];
             if (!downloadButton) {
                 if (getButtonLocation(shareButton) == ButtonLocation.HOME_PAGE) {
