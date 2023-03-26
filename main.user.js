@@ -194,7 +194,7 @@ function mainLoop() {
 `);
 
     let articles = document.querySelectorAll('article.css-1dbjc4n');
-    let modals = document.querySelectorAll('div.css-1dbjc4n[aria-modal="true"]');
+    let modals = document.querySelectorAll('div.css-1dbjc4n[aria-modal="true"] > div > div:first-child');
     let containers;
     if (isPhotoModalPage() && modals.length > 0) {
         containers = Array.from(articles).concat(Array.from(modals));
