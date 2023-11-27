@@ -134,9 +134,8 @@ let ButtonLocation = {
     PHOTO_MODAL: 3,
 };
 
-function getButtonLocation(shareButton) {
-    let innerDiv = shareButton.querySelector(':scope div.css-901oao');
-    if (innerDiv.classList.contains('r-jwli3a')) {
+function getButtonLocation(container) {
+    if (container.classList.contains('r-16y2uox')) {
         return ButtonLocation.PHOTO_MODAL;
     }
     if (isTweetPage()) {
@@ -146,17 +145,20 @@ function getButtonLocation(shareButton) {
 }
 
 function mainLoop() {
+    // cspell: disable
     let buttonHomePage = htmlToElement(`
-<div class="css-1dbjc4n r-18u37iz r-1h0z5md">
-    <div role="button" tabindex="0" class="css-18t94o4 css-1dbjc4n r-1777fci r-3vrnjh r-1ny4l3l r-bztko3 r-lrvibr download-button" data-testid="download">
-        <div dir="ltr" class="css-901oao r-1awozwy r-1bwzh9t r-6koalj r-37j5jr r-a023e6 r-16dba41 r-1h0z5md r-hjklzo r-bcqeeo r-o7ynqc r-clp7b1 r-3s2u2q r-qvutc0">
-            <div class="css-1dbjc4n r-xoduu5">
-                <div class="css-1dbjc4n r-1niwhzg r-sdzlij r-1p0dtai r-xoduu5 r-1d2f490 r-xf4iuw r-1ny4l3l r-u8s1d r-zchlnj r-ipm5af r-o7ynqc r-6416eg"></div>
+<div class="css-175oi2r r-18u37iz r-1h0z5md r-13awgt0">
+    <div role="button" tabindex="0" class="css-175oi2r r-1777fci r-bt1l66 r-bztko3 r-lrvibr r-1loqt21 r-1ny4l3l download-button" data-testid="download">
+        <div dir="ltr" class="css-1rynq56 r-bcqeeo r-qvutc0 r-37j5jr r-a023e6 r-rjixqe r-16dba41 r-1awozwy r-6koalj r-1h0z5md r-o7ynqc r-clp7b1 r-3s2u2q" style="color: rgb(113, 118, 123); text-overflow: unset;">
+            <div class="css-175oi2r r-xoduu5">
+                <div class="css-175oi2r r-xoduu5 r-1p0dtai r-1d2f490 r-u8s1d r-zchlnj r-ipm5af r-1niwhzg r-sdzlij r-xf4iuw r-o7ynqc r-6416eg r-1ny4l3l"></div>
                 <svg class="r-4qtqp9 r-yyyyoo r-1xvli5t r-dnmrzs r-bnwqim r-1plcrui r-lrvibr r-1hdv0qi" fill="#000000" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" viewBox="0 0 24 24" style="enable-background:new 0 0 24 24;" xml:space="preserve"><path d="M20.953,11.003l-9.95,9.95c-1.097,1.096-2.537,1.645-3.978,1.645s-2.881-0.548-3.978-1.645  c-2.193-2.194-2.193-5.762-0.001-7.956l5.561-5.56c1.175-1.176,3.225-1.177,4.401,0c0.589,0.588,0.912,1.369,0.912,2.201  s-0.323,1.613-0.912,2.201l-4.316,4.316c-0.234,0.234-0.613,0.234-0.848,0s-0.234-0.614,0-0.849l4.316-4.316  c0.361-0.361,0.56-0.842,0.56-1.353s-0.198-0.991-0.56-1.352c-0.723-0.723-1.983-0.722-2.706,0l-5.56,5.56  c-1.725,1.725-1.725,4.533,0.001,6.258c1.726,1.727,4.533,1.726,6.259,0l9.949-9.95c1.725-1.725,1.725-4.533-0.001-6.258  c-1.725-1.726-4.532-1.725-6.259,0l-1.281,1.283c-0.234,0.234-0.614,0.234-0.849,0c-0.234-0.234-0.234-0.614-0.001-0.849  l1.282-1.283c2.195-2.192,5.763-2.193,7.956,0C23.146,5.241,23.146,8.81,20.953,11.003z"/></svg>
             </div>
-            <div class="css-1dbjc4n r-xoduu5 r-1udh08x">
-                <span class="css-901oao css-16my406 r-1tl8opc r-n6v787 r-1cwl3u0 r-1k6nrdp r-1e081e0 r-d3hbe1 r-qvutc0" style="transition-duration: 0.3s; transition-property: transform;">
-                    <span class="css-901oao css-16my406 r-1tl8opc r-bcqeeo r-qvutc0 download-button-counter">1</span>
+            <div class="css-175oi2r r-xoduu5 r-1udh08x">
+                <span data-testid="app-text-transition-container" style="transition-property: transform; transition-duration: 0.3s; transform: translate3d(0px, 0px, 0px);">
+                    <span class="css-1qaijid r-qvutc0 r-1tl8opc r-n6v787 r-1cwl3u0 r-1k6nrdp r-1pn2ns4" style="text-overflow: unset;">
+                        <span class="css-1qaijid r-bcqeeo r-qvutc0 r-1tl8opc download-button-counter" style="text-overflow: unset;">1</span>
+                    </span>
                 </span>
             </div>
         </div>
@@ -164,16 +166,18 @@ function mainLoop() {
 </div>
 `);
     let buttonModal = htmlToElement(`
-<div class="css-1dbjc4n r-18u37iz r-1h0z5md">
-    <div role="button" tabindex="0" class="css-18t94o4 css-1dbjc4n r-1777fci r-bt1l66 r-1ny4l3l r-bztko3 r-lrvibr download-button" data-testid="download">
-        <div dir="ltr" class="css-901oao r-1awozwy r-jwli3a r-6koalj r-37j5jr r-ubezar r-16dba41 r-1h0z5md r-rjixqe r-bcqeeo r-o7ynqc r-clp7b1 r-3s2u2q r-qvutc0">
-            <div class="css-1dbjc4n r-xoduu5">
-                <div class="css-1dbjc4n r-1niwhzg r-sdzlij r-1p0dtai r-xoduu5 r-1d2f490 r-xf4iuw r-1ny4l3l r-u8s1d r-zchlnj r-ipm5af r-o7ynqc r-6416eg"></div>
+<div class="css-175oi2r r-18u37iz r-1h0z5md r-13awgt0">
+    <div role="button" tabindex="0" class="css-175oi2r r-1777fci r-bt1l66 r-bztko3 r-lrvibr r-1loqt21 r-1ny4l3l download-button" data-testid="download">
+        <div dir="ltr" class="css-1rynq56 r-bcqeeo r-qvutc0 r-37j5jr r-a023e6 r-rjixqe r-16dba41 r-1awozwy r-6koalj r-1h0z5md r-o7ynqc r-clp7b1 r-3s2u2q" style="color: rgb(255, 255, 255); text-overflow: unset;">
+            <div class="css-175oi2r r-xoduu5">
+                <div class="css-175oi2r r-xoduu5 r-1p0dtai r-1d2f490 r-u8s1d r-zchlnj r-ipm5af r-1niwhzg r-sdzlij r-xf4iuw r-o7ynqc r-6416eg r-1ny4l3l"></div>
                 <svg class="r-4qtqp9 r-yyyyoo r-50lct3 r-dnmrzs r-bnwqim r-1plcrui r-lrvibr r-1srniue" fill="#000000" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" viewBox="0 0 24 24" style="enable-background:new 0 0 24 24;" xml:space="preserve"><path d="M20.953,11.003l-9.95,9.95c-1.097,1.096-2.537,1.645-3.978,1.645s-2.881-0.548-3.978-1.645  c-2.193-2.194-2.193-5.762-0.001-7.956l5.561-5.56c1.175-1.176,3.225-1.177,4.401,0c0.589,0.588,0.912,1.369,0.912,2.201  s-0.323,1.613-0.912,2.201l-4.316,4.316c-0.234,0.234-0.613,0.234-0.848,0s-0.234-0.614,0-0.849l4.316-4.316  c0.361-0.361,0.56-0.842,0.56-1.353s-0.198-0.991-0.56-1.352c-0.723-0.723-1.983-0.722-2.706,0l-5.56,5.56  c-1.725,1.725-1.725,4.533,0.001,6.258c1.726,1.727,4.533,1.726,6.259,0l9.949-9.95c1.725-1.725,1.725-4.533-0.001-6.258  c-1.725-1.726-4.532-1.725-6.259,0l-1.281,1.283c-0.234,0.234-0.614,0.234-0.849,0c-0.234-0.234-0.234-0.614-0.001-0.849  l1.282-1.283c2.195-2.192,5.763-2.193,7.956,0C23.146,5.241,23.146,8.81,20.953,11.003z"/></svg>
             </div>
-            <div class="css-1dbjc4n r-xoduu5 r-1udh08x">
-                <span class="css-901oao css-16my406 r-1tl8opc r-n6v787 r-1cwl3u0 r-1k6nrdp r-1e081e0 r-d3hbe1 r-qvutc0" style="transition-duration: 0.3s; transition-property: transform;">
-                    <span class="css-901oao css-16my406 r-1tl8opc r-bcqeeo r-qvutc0 download-button-counter">1</span>
+            <div class="css-175oi2r r-xoduu5 r-1udh08x">
+                <span data-testid="app-text-transition-container" style="transition-property: transform; transition-duration: 0.3s; transform: translate3d(0px, 0px, 0px);">
+                    <span class="css-1qaijid r-qvutc0 r-1tl8opc r-n6v787 r-1cwl3u0 r-1k6nrdp r-1pn2ns4" style="text-overflow: unset;">
+                        <span class="css-1qaijid r-bcqeeo r-qvutc0 r-1tl8opc download-button-counter" style="text-overflow: unset;">1</span>
+                    </span>
                 </span>
             </div>
         </div>
@@ -181,20 +185,32 @@ function mainLoop() {
 </div>
 `);
     let buttonTweetPage = htmlToElement(`
-<div class="css-1dbjc4n r-18u37iz r-1h0z5md">
-    <div role="button" tabindex="0" class="css-18t94o4 css-1dbjc4n r-1777fci r-bt1l66 r-1ny4l3l r-bztko3 r-lrvibr download-button" data-testid="download">
-        <div dir="ltr" class="css-901oao r-1awozwy r-1bwzh9t r-6koalj r-37j5jr r-ubezar r-16dba41 r-1h0z5md r-rjixqe r-bcqeeo r-o7ynqc r-clp7b1 r-3s2u2q r-qvutc0">
-            <div class="css-1dbjc4n r-xoduu5">
-                <div class="css-1dbjc4n r-1niwhzg r-sdzlij r-1p0dtai r-xoduu5 r-1d2f490 r-xf4iuw r-1ny4l3l r-u8s1d r-zchlnj r-ipm5af r-o7ynqc r-6416eg"></div>
+<div class="css-175oi2r r-18u37iz r-1h0z5md r-13awgt0">
+    <div role="button" tabindex="0" class="css-175oi2r r-1777fci r-bt1l66 r-bztko3 r-lrvibr r-1loqt21 r-1ny4l3l download-button" data-testid="download">
+        <div dir="ltr" class="css-1rynq56 r-bcqeeo r-qvutc0 r-37j5jr r-a023e6 r-rjixqe r-16dba41 r-1awozwy r-6koalj r-1h0z5md r-o7ynqc r-clp7b1 r-3s2u2q" style="color: rgb(113, 118, 123); text-overflow: unset;">
+            <div class="css-175oi2r r-xoduu5">
+                <div class="css-175oi2r r-xoduu5 r-1p0dtai r-1d2f490 r-u8s1d r-zchlnj r-ipm5af r-1niwhzg r-sdzlij r-xf4iuw r-o7ynqc r-6416eg r-1ny4l3l"> </div>
                 <svg class="r-4qtqp9 r-yyyyoo r-1xvli5t r-dnmrzs r-bnwqim r-1plcrui r-lrvibr r-1hdv0qi" fill="#000000" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" viewBox="0 0 24 24" style="enable-background:new 0 0 24 24;" xml:space="preserve"><path d="M20.953,11.003l-9.95,9.95c-1.097,1.096-2.537,1.645-3.978,1.645s-2.881-0.548-3.978-1.645  c-2.193-2.194-2.193-5.762-0.001-7.956l5.561-5.56c1.175-1.176,3.225-1.177,4.401,0c0.589,0.588,0.912,1.369,0.912,2.201  s-0.323,1.613-0.912,2.201l-4.316,4.316c-0.234,0.234-0.613,0.234-0.848,0s-0.234-0.614,0-0.849l4.316-4.316  c0.361-0.361,0.56-0.842,0.56-1.353s-0.198-0.991-0.56-1.352c-0.723-0.723-1.983-0.722-2.706,0l-5.56,5.56  c-1.725,1.725-1.725,4.533,0.001,6.258c1.726,1.727,4.533,1.726,6.259,0l9.949-9.95c1.725-1.725,1.725-4.533-0.001-6.258  c-1.725-1.726-4.532-1.725-6.259,0l-1.281,1.283c-0.234,0.234-0.614,0.234-0.849,0c-0.234-0.234-0.234-0.614-0.001-0.849  l1.282-1.283c2.195-2.192,5.763-2.193,7.956,0C23.146,5.241,23.146,8.81,20.953,11.003z"/></svg>
+            </div>
+            <div class="css-175oi2r r-xoduu5 r-1udh08x">
+                <span data-testid="app-text-transition-container" style="transform: translate3d(0px, 0px, 0px); transition-property: transform; transition-duration: 0.3s;">
+                    <span class="css-1qaijid r-qvutc0 r-1tl8opc r-n6v787 r-1cwl3u0 r-1k6nrdp r-1pn2ns4" style="text-overflow: unset;">
+                        <span class="css-1qaijid r-bcqeeo r-qvutc0 r-1tl8opc download-button-counter" style="text-overflow: unset;">1</span>
+                    </span>
+                </span>
             </div>
         </div>
     </div>
 </div>
 `);
 
-    let articles = document.querySelectorAll('article.css-1dbjc4n');
-    let modals = document.querySelectorAll('div.css-1dbjc4n[aria-modal="true"] > div > div:first-child');
+    // home:            article.css-175oi2r.r-18u37iz.r-1udh08x.r-i023vh.r-1qhn6m8.r-o7ynqc.r-6416eg.r-1ny4l3l.r-1loqt21
+    // tweet main:      article.css-175oi2r.r-18u37iz.r-1udh08x.r-i023vh.r-1qhn6m8.r-1ny4l3l
+    // tweet comments:  article.css-175oi2r.r-18u37iz.r-1udh08x.r-i023vh.r-1qhn6m8.r-o7ynqc.r-6416eg.r-1ny4l3l.r-1loqt21
+    let articles = document.querySelectorAll('article.css-175oi2r');
+    // div.css-175oi2r.r-16y2uox.r-1wbh5a2
+    let modals = document.querySelectorAll('div.css-175oi2r[aria-modal="true"] > div > div:first-child');
+    // cspell: enable
     let containers;
     if (isPhotoModalPage() && modals.length > 0) {
         containers = Array.from(articles).concat(Array.from(modals));
@@ -212,20 +228,20 @@ function mainLoop() {
         }
         if (imageBoxes.length > 0) {
             let filenamePrefix;
-            if (imageBoxes[0].closest('div.css-1dbjc4n > a[href*="/status/"]')) {
-                filenamePrefix = imageBoxes[0].closest('div.css-1dbjc4n > a[href*="/status/"]').getAttribute('href').replace(/^\/(.*)\/status\/(\d+).*?$/, '$1-$2');
+            if (imageBoxes[0].closest('div.css-175oi2r > a[href*="/status/"]')) {
+                filenamePrefix = imageBoxes[0].closest('div.css-175oi2r > a[href*="/status/"]').getAttribute('href').replace(/^\/(.*)\/status\/(\d+).*?$/, '$1-$2');
             } else {
                 filenamePrefix = window.location.pathname.replace(/^\/(.*)\/status\/(\d+)\/.*?$/, '$1-$2');
             }
-            let buttonGroup = container.querySelector(':scope div.css-1dbjc4n > div.css-1dbjc4n.r-1kbdv8c.r-18u37iz[role="group"]');
+            let buttonGroup = container.querySelector(':scope div.css-175oi2r > div.css-175oi2r.r-1kbdv8c.r-18u37iz[role="group"]');
             let buttons = buttonGroup.querySelectorAll(':scope > div:last-child');
             let shareButton = buttons[buttons.length - 1];
             if (!downloadButton) {
-                if (getButtonLocation(shareButton) == ButtonLocation.HOME_PAGE) {
+                if (getButtonLocation(container) == ButtonLocation.HOME_PAGE) {
                     shareButton.before(buttonHomePage);
-                } else if (getButtonLocation(shareButton) == ButtonLocation.TWEET_PAGE) {
+                } else if (getButtonLocation(container) == ButtonLocation.TWEET_PAGE) {
                     shareButton.before(buttonTweetPage);
-                } else if (getButtonLocation(shareButton) == ButtonLocation.PHOTO_MODAL) {
+                } else if (getButtonLocation(container) == ButtonLocation.PHOTO_MODAL) {
                     shareButton.before(buttonModal);
                 }
                 downloadButton = container.querySelector('.download-button');
@@ -234,7 +250,7 @@ function mainLoop() {
                 downloadButton.setAttribute('count-images', imageBoxes.length);
                 let downloadButtonCounter = container.querySelector('.download-button-counter');
                 if (downloadButtonCounter) {
-                    downloadButtonCounter.innerHTML = getButtonLocation(shareButton) == ButtonLocation.PHOTO_MODAL ? 1 : imageBoxes.length;
+                    downloadButtonCounter.innerHTML = getButtonLocation(container) == ButtonLocation.PHOTO_MODAL ? 1 : imageBoxes.length;
                 }
                 let clonedButton = downloadButton.cloneNode(true);
                 if (imageBoxes.length === 1) {
@@ -243,7 +259,7 @@ function mainLoop() {
                         let imageUrl = imageBoxes[0].getAttribute('src');
                         downloadImage(imageUrl, filenamePrefix);
                     });
-                } else if (getButtonLocation(shareButton) == ButtonLocation.PHOTO_MODAL) {
+                } else if (getButtonLocation(container) == ButtonLocation.PHOTO_MODAL) {
                     downloadButton.parentNode.replaceChild(clonedButton, downloadButton);
                     clonedButton.addEventListener('click', (_event) => {
                         let modalUl = container.querySelector('ul');
@@ -277,10 +293,10 @@ function mainLoop() {
     .download-button:hover > div > div > div:first-of-type {
         background-color: rgba(255, 102, 0, 0.1);
     }
-    div.css-1dbjc4n[aria-modal="true"] .download-button:hover > div {
+    div.css-175oi2r[aria-modal="true"] .download-button:hover > div {
         color: rgb(255, 255, 255);
     }
-    div.css-1dbjc4n[aria-modal="true"] .download-button:hover > div > div > div:first-of-type {
+    div.css-175oi2r[aria-modal="true"] .download-button:hover > div > div > div:first-of-type {
         background-color: rgba(255, 255, 255, 0.1);
     }
 </style>
