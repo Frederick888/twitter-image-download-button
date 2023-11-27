@@ -234,15 +234,14 @@ function mainLoop() {
                 filenamePrefix = window.location.pathname.replace(/^\/(.*)\/status\/(\d+)\/.*?$/, '$1-$2');
             }
             let buttonGroup = container.querySelector(':scope div.css-175oi2r > div.css-175oi2r.r-1kbdv8c.r-18u37iz[role="group"]');
-            let buttons = buttonGroup.querySelectorAll(':scope > div:last-child');
-            let shareButton = buttons[buttons.length - 1];
+            let bookmarkButton = buttonGroup.querySelector(':scope > div > div[data-testid="bookmark"]').parentNode;
             if (!downloadButton) {
                 if (getButtonLocation(container) == ButtonLocation.HOME_PAGE) {
-                    shareButton.before(buttonHomePage);
+                    bookmarkButton.before(buttonHomePage);
                 } else if (getButtonLocation(container) == ButtonLocation.TWEET_PAGE) {
-                    shareButton.before(buttonTweetPage);
+                    bookmarkButton.before(buttonTweetPage);
                 } else if (getButtonLocation(container) == ButtonLocation.PHOTO_MODAL) {
-                    shareButton.before(buttonModal);
+                    bookmarkButton.before(buttonModal);
                 }
                 downloadButton = container.querySelector('.download-button');
             }
